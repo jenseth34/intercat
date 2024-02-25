@@ -1,6 +1,3 @@
-io.stdout:setvbuf("no")
-require "colors"
-
 SM = require "lib.SceneMgr"
 
 function love.load()

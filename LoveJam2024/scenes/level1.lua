@@ -1,18 +1,24 @@
 local scene = {}
 
 function scene.load()
-  function love.keypressed(key)
-    if key == "space" then
-      SM.load("game")
-    end
-  end
+  Object = require "lib.classic"
+  require "game"
+  
+  level = Game(false)
+  
+  level:load()
 end
 
 function scene.update(dt)
+  level:update(dt)
+  
+  if level.done == true then
+    SM.load("transition")
+  end
 end
 
-function scene.draw()
-  love.graphics.print("Level 1", 100, 100)
+function scene:draw()
+  level:draw()
 end
 
 return scene

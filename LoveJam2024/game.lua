@@ -3,13 +3,21 @@ require "colors"
 
 local scene = {}
 
-function scene.load()
+Game = Object:extend()
+
+function Game:new(done)
+  self.done = done
+end
+
+--to put in game.lua
+function Game:load()
   Object = require "lib.classic"
   tick = require "lib.tick"
-  require "shape"
-  require "rectangle"
+  require "target"
+  require "player"
   
-  player = Rectangle(350, 500, 100, 25)
+  player = Player(350, 500, 400)
+  
   listOfRectangle = {}
   listOfRedRectangle = {}
   listOfEndRectangle = {}
@@ -25,18 +33,20 @@ function scene.load()
   love.graphics.setBackgroundColor(1, 1, 1)
 end
 
-function scene.update(dt)
+
+function Game:update(dt)
   player:move(dt)
   tick.update(dt)
   
   local removeRectangle = {}
   
+  --to put in game.lua
   for i, v in ipairs(listOfRectangle) do
-    if checkCollisions(player, v) then
+    if v:checkCollisions(player) then
       table.remove(listOfRectangle, i)
       points = points + 10
     end
-    if outOfBounds(v) then
+    if v:outOfBounds() then
       table.remove(listOfRectangle, i)
     end
   end
@@ -46,11 +56,11 @@ function scene.update(dt)
   end
   
   for i, v in ipairs(listOfRedRectangle) do
-    if checkCollisions(player, v) then
+    if v:checkCollisions(player) then
       table.remove(listOfRedRectangle, i)
       points = points - 10
     end
-    if outOfBounds(v) then
+    if v:outOfBounds() then
       table.remove(listOfRedRectangle, i)
     end
   end
@@ -60,11 +70,11 @@ function scene.update(dt)
   end
   
   for i, v in ipairs(listOfEndRectangle) do
-    if checkCollisions(player, v) then
+    if v:checkCollisions(player) then
       table.remove(listOfEndRectangle, i)
-      points = points - 10
+      self.done = true
     end
-    if outOfBounds(v) then
+    if v:outOfBounds() then
       table.remove(listOfEndRectangle, i)
     end
   end
@@ -75,22 +85,23 @@ function scene.update(dt)
   
 end
 
-function scene:draw()
-  player:draw("line", blue)
+function Game:draw()
+  player:draw()
   
-  love.graphics.setColor(black)
-  love.graphics.print(points, 50, 50)
+  graphicPoints = {black, points}
+  
+  love.graphics.print(graphicPoints, 50, 50)
   
   for i, v in ipairs(listOfRectangle) do
-    v:draw("line", green)
+    v:draw()
   end
   
   for i, v in ipairs(listOfRedRectangle) do
-    v:draw("line", red)
+    v:draw()
   end
   
   for i, v in ipairs(listOfEndRectangle) do
-    v:draw("line", black)
+    v:draw()
   end
   
   if drawRectangle == true then
@@ -102,7 +113,6 @@ function scene:draw()
     spawnEnd()
     drawEndRectangle = false
   end
-  
 end
 
 function spawnObjects()
@@ -110,37 +120,14 @@ function spawnObjects()
   randValue = love.math.random(0, 1)
   
   if randValue == 1 then
-    Rectangle:createRectangle(listOfRectangle)
+    Target:createTarget("assets/Mouse.png", listOfRectangle, 50)
   else
-    Rectangle:createRectangle(listOfRedRectangle)
+    Target:createTarget("assets/Water.png", listOfRedRectangle, 50)
   end
 end
 
 function spawnEnd()
   tick.delay(function () drawEndRectangle = true end, 10)
   
-  Rectangle:createRectangle(listOfEndRectangle)
+  Target:createTarget("assets/Desktop.png", listOfEndRectangle, 50)
 end
-
-function checkCollisions(a, b)
-  local a_left = a.x
-  local a_right = a.x + a.width
-  local a_top = a.y
-  local a_bottom = a.y + a.height
-  
-  local b_left = b.x
-  local b_right = b.x + b.width
-  local b_top = b.y
-  local b_bottom = b.y + b.height
-  
-  return a_right > b_left and a_left < b_right 
-  and a_bottom > b_top and a_top < b_bottom
-end
-
-function outOfBounds(a)
-  return a.x < 0 or a.y < 0 
-  or a.x + a.width > love.graphics.getWidth() 
-  or a.y + a.height > love.graphics.getHeight()
-end
-
-return scene

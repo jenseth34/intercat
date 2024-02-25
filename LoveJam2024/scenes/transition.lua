@@ -1,7 +1,6 @@
 local scene = {}
 
 function scene.load()
-  cat = love.graphics.newImage("assets/TheTigerCat.png")
 end
 
 function scene.update(dt)
@@ -15,7 +14,10 @@ function scene.update(dt)
 end
 
 function scene.draw()
-  love.graphics.print("Menu", 100, 100)
+  
+  text = {black, "Good Job! Press Space to continue"}
+  
+  love.graphics.print(text, 100, 100)
 end
 
 return scene

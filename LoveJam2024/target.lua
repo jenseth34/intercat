@@ -18,7 +18,7 @@ function Target:draw()
 end
 
 function Target:createTarget(image, list, speed)
-  newTarget = Target(image, love.math.random(1, 600), 100, self.width, self.height, speed)
+  newTarget = Target(image, love.math.random(1, 600), 50, self.width, self.height, speed)
   
   table.insert(list, newTarget)
 end

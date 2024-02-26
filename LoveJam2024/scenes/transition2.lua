@@ -1,24 +1,25 @@
-require "colors"
-
 local scene = {}
 
 function scene.load()
-  love.graphics.setBackgroundColor(teal)
-  
 end
 
 function scene.update(dt)
   
+  local count = 1
+  
   function love.keypressed(key)
     if key == "space" then
-      SM.load("level1")
+      SM.load("level3")
     end
   end
   
 end
 
 function scene.draw()
-  love.graphics.print("Menu", 100, 100)
+  
+  text = {white, "Good Job! Almost Done"}
+  
+  love.graphics.print(text, 100, 100)
 end
 
 return scene

@@ -38,6 +38,4 @@ function Player:move(dt)
   elseif self.y + self.height > window_height then
     self.y = window_height - self.height
   end
-  
-  
 end

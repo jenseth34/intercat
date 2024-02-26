@@ -3,8 +3,13 @@ require "colors"
 local scene = {}
 
 function scene.load()
-  love.graphics.setBackgroundColor(teal)
+  nippo_font = love.graphics.newFont("assets/Nippo-Medium.ttf", 80)
   
+  song = love.audio.newSource("assets/Intercat.wav", "stream")
+  song:setLooping(true)
+  song:play()
+  
+  love.graphics.setBackgroundColor(teal)
 end
 
 function scene.update(dt)
@@ -18,7 +23,13 @@ function scene.update(dt)
 end
 
 function scene.draw()
-  love.graphics.print("Menu", 100, 100)
+  intercat = {white, "Intercat"}
+  love.graphics.setFont(nippo_font)
+  love.graphics.print(intercat, 250, 250)
+  
+  start = {white, "Press space to start"}
+  love.graphics.setNewFont(20)
+  love.graphics.print(start, 275, 350)
 end
 
 return scene

@@ -2,6 +2,7 @@ io.stdout:setvbuf("no")
 require "colors"
 
 Game = Object:extend()
+score = {}
 
 function Game:new(done, speedTargets, speedEndTarget, delayTarget, delayEndTarget)
   self.done = done
@@ -25,7 +26,10 @@ function Game:load()
   listOfComputer = {}
   points = 0
   
-  --Create a boolean
+  good_sfx = love.audio.newSource("assets/good.wav", "static")
+  bad_sfx = love.audio.newSource("assets/bad.wav", "static")
+  end_sfx = love.audio.newSource("assets/end.wav", "static")
+  
   drawTarget = false
   drawEndTarget = false
   
@@ -33,7 +37,6 @@ function Game:load()
   tick.delay(function () drawEndTarget = true end, self.delayEndTarget)
   
 end
-
 
 function Game:update(dt)
   player:move(dt)
@@ -43,6 +46,7 @@ function Game:update(dt)
   for i, v in ipairs(listOfMice) do
     if v:checkCollisions(player) then
       table.remove(listOfMice, i)
+      good_sfx:play()
       points = points + 10
     end
     if v:outOfBounds() then
@@ -57,6 +61,7 @@ function Game:update(dt)
   for i, v in ipairs(listOfWater) do
     if v:checkCollisions(player) then
       table.remove(listOfWater, i)
+      bad_sfx:play()
       points = points - 10
     end
     if v:outOfBounds() then
@@ -71,6 +76,8 @@ function Game:update(dt)
   for i, v in ipairs(listOfComputer) do
     if v:checkCollisions(player) then
       table.remove(listOfComputer, i)
+      table.insert(score, points)
+      end_sfx:play()
       self.done = true
     end
     if v:outOfBounds() then
@@ -87,9 +94,9 @@ end
 function Game:draw()
   player:draw()
   
-  graphicPoints = {black, points}
+  graphicPoints = {white, points}
   
-  love.graphics.print(graphicPoints, 50, 50)
+  love.graphics.print(graphicPoints, 50, 25)
   
   for i, v in ipairs(listOfMice) do
     v:draw()

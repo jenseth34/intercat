@@ -17,9 +17,20 @@ end
 
 function scene.draw()
   
-  text = {white, "Good Job! Press Space to continue"}
-  
+  love.graphics.setNewFont(20)
+  text = {white, "Congrats! Here are your scores: "}
   love.graphics.print(text, 100, 100)
+  
+  sum = 0
+  for i, v in ipairs(score) do
+    love.graphics.print("Level "..i..": "..v, 100, 150 + 50 * i)
+    sum = sum + v
+  end
+  
+  love.graphics.print("Total: "..sum, 500, 500)
+  love.graphics.setNewFont(12)
+  love.graphics.print("Press Space to quit", 500, 550)
+  
 end
 
 return scene

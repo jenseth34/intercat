@@ -2,7 +2,7 @@
 
 # Intercat
 
-This small project was made in a weekend for the [LOVE Jam 2024](https://itch.io/jam/love2d-jam-2024) on itch.io.
+This small project was made in a weekend for the [LÖVE Jam 2024](https://itch.io/jam/love2d-jam-2024) on itch.io.
 
 # Description
 
